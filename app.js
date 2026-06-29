@@ -7,8 +7,8 @@ app.listen(3000 , () => {
 });
 
 app.get('/', (req,res) => {
+    console.log("route entered");
     res.send("Welcome to inventory management system");
-    console.log("Server is running");
 });
 
 
@@ -17,7 +17,8 @@ app.get('/Inventorysystem', (req, res) => {
 });
 
 app.get('/products', (req, res) => {
-    res.send(products.json);
+    console.log("products route entered");
+    res.json(products);
 });
 
 
