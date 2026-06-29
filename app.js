@@ -2,7 +2,7 @@ const exp = require('express');
 
 const app = exp();
 
-app.listen(3000 , (res, req) => {
+app.listen(3000 , () => {
     console.log("Express Server is working on port 3000");
 });
 
