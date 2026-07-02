@@ -28,7 +28,7 @@ app.get('/products', (req, res) => {
 
 //Get route - to get Specifi products using route params.
 app.get('/products/:id', (req,res) => {
-    productID = Number(req.params.id);
+    const productID = Number(req.params.id);
     const product = products.find(p => p.productId === productID);
     if(product) {
         res.send(product);
@@ -54,10 +54,11 @@ app.post('/products', (req, res) => {
         console.log(new_product.productId);
         console.log(new_product);
         products.push(new_product);
-        res.send("Product Added successfully");
+        res.status(201).send("Product Added successfully");
     }
     else {
         res.status(400).send("Invalid product fields")
+        return;
     }
 });
 
@@ -69,6 +70,7 @@ app.put('/products/:id', (req,res) => {
     const product = products.find(p => p.productId == updid);
     if (!product){
         res.status(404).send("Product not Found");
+        return;
     }
     else {
         let allowed = ["name", "price", "category", "quantity"];
@@ -77,11 +79,13 @@ app.put('/products/:id', (req,res) => {
         let validfields = true;
         if (length == 0){
             res.status(400).send("Fields are empty");
+            return;
         }
         else {
             fields.forEach(f => {
                 if(!allowed.includes(f)){
                     validfields = false;
+                    res.status(404).send("Invallid Fields are found");
                 }
             });
             if (validfields) {
@@ -96,19 +100,17 @@ app.put('/products/:id', (req,res) => {
 });
 
 //Delete route
-app.delete('/product/:id', (req,res) => {
-    res.send("route Entered")
-    let delid = Number(req.params.id);
-    let product = products.find(p => p.productId == delid);
-    if(!product) {
+app.delete('/products/:id', (req,res) => {
+    const delid = Number(req.params.id);
+    let index = products.findIndex(p => p.productId == delid);
+    if(index == -1) {
         res.status(404).send("No product found");
+        return;
     }
     else {
-        products.splice(product, 0);
+        products.splice(index, 1);
         res.send("product deleted successfully");
     }
-    res.send("route ended");
-
 });
 
 //End Middleware
